@@ -258,6 +258,23 @@ module CardanoWallet
     # API for Transactions
     # @see https://input-output-hk.github.io/cardano-wallet/api/edge/#tag/Transactions
     class Transactions < Base
+      # Balance transaction
+      # @see https://input-output-hk.github.io/cardano-wallet/api/edge/#operation/balanceTransaction
+      # @param wid [String] source wallet id
+      # @param transaction [Hash] transaction object
+      # @param signatories [Array of String] A flat list of account public keys of parties engaged in transaction.
+      # @param inputs [Array of Hashes] A flat list of node compliant inputs.
+      def balance(wid, transaction, signatories, inputs)
+        payload = {}
+        payload[:transaction] = transaction
+        payload[:signatories] = signatories
+        payload[:inputs] = inputs
+
+        self.class.post("/wallets/#{wid}/transactions-balance",
+                        body: payload.to_json,
+                        headers: { 'Content-Type' => 'application/json' })
+      end
+
       # Construct transaction
       # @see https://input-output-hk.github.io/cardano-wallet/api/edge/#operation/constructTransaction
       # @param wid [String] source wallet id
